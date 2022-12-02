@@ -1,0 +1,73 @@
+@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,400;0,900;1,100;1,900&family=Turret+Road:wght@400;500;700;800&display=swap");
+
+canvas {
+  max-width: 100vw;
+  width: 100vw;
+  max-height: 100vh;
+  height: 100vh;
+  border: red solid 2px;
+}
+
+.coltrolPandel {
+  position: absolute;
+  top: 80px;
+  left: 80px;
+  padding: 30px;
+  z-index: 2;
+  background-color: rgba(255, 255, 255, 0.13);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
+  transition: 0.4s;
+}
+
+.axisContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+h1 {
+  font-family: "Be Vietnam Pro", sans-serif;
+  font-family: "Turret Road", cursive;
+  padding: 0;
+  margin: 0;
+  padding-bottom: 20px;
+  color: aliceblue;
+}
+
+h2 {
+  font-family: "Be Vietnam Pro", sans-serif;
+  font-family: "Turret Road", cursive;
+  padding: 0;
+  margin: 0;
+  font-size: 20pt;
+  font-weight: 600;
+  color: azure;
+}
+
+.coltrolPandel button {
+  font-family: "Be Vietnam Pro", sans-serif;
+  font-family: "Turret Road", cursive;
+  padding: 0;
+  margin-bottom: 20px;
+  margin-right: 20px;
+  border-radius: 8px;
+  border: 5px solid azure;
+  padding: 0.6em 1.2em;
+  font-size: 16pt;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.25s;
+  color: azure;
+  background-color: transparent;
+}
+button:hover {
+  color: black;
+  background-color: azure;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
