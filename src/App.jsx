@@ -1,10 +1,7 @@
 import { Suspense, useState, useRef, useEffect } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useGLTF, OrbitControls, ContactShadows, Environment } from '@react-three/drei'
-import { Howl, Howler } from 'howler'
 import useSound from 'use-sound';
-import maschineSound from '../src/assets/machine_1.wav'
-import spindleSound from '../src/assets/electric-drill-1.mp3'
 import './App.css'
 
 function App() {
@@ -18,6 +15,12 @@ function App() {
   const [spindelRunning, setSpindelrunning] = useState(false)
 
   const intervalRef = useRef(null);
+  const axisIntervalRef = {
+    x: useRef(null),
+    y: useRef(null),
+    z: useRef(null)
+  }
+  
 
   const maxTravel = {
     x: .48,
@@ -31,16 +34,6 @@ function App() {
     z: -.05
   }
 
-  // const [playTest, { stop }] = useSound( 
-  //   maschineSound,
-  //   { volume: 0.5 }
-  // );
-
-  // const [playSpindleSound] = useSound( 
-  //   spindleSound,
-  //   { volume: 0.5 }
-  // );
-
   const [play, { stop }] = useSound('../src/assets/machine_1.wav', {
     sprite: {
       axisMoving: [0, 100],
@@ -50,10 +43,6 @@ function App() {
     loop: true
   });
 
-  // const test = useSound(
-  //   spindleSound, maschineSound,
-  //   {volume: 0.5}
-  // )
 
   const moveAxis = (axis, direction) => {
     play({ id: 'axisMoving' })
@@ -61,7 +50,7 @@ function App() {
     const acceleration = 0.00001
     let velocity = 0
     if (direction === 'forward' && axisPosition[axis] < maxTravel[axis]) {
-      intervalRef.current = setInterval(() => {
+      axisIntervalRef[axis].current = setInterval(() => {
         if (velocity < maxVelocity) {
           velocity += acceleration
         }
@@ -71,7 +60,7 @@ function App() {
     }
 
     if (direction === 'backward' && axisPosition[axis] > minTravel[axis]) {
-      intervalRef.current = setInterval(() => {
+      axisIntervalRef[axis].current = setInterval(() => {
         if (velocity < maxVelocity) {
           velocity += acceleration
         }
@@ -83,15 +72,26 @@ function App() {
 
   const stopAxis = (axis, direction) => {
     console.log('stop');
-    stop()
-    clearInterval(intervalRef.current);
-    intervalRef.current = null;
+    
+    clearInterval(axisIntervalRef[axis].current);
+    axisIntervalRef[axis].current = null;
     if (direction === 'forward') {
       setAxisPosition(prevPos => ({ ...prevPos, [axis]: maxTravel[axis] }))
     }
     if (direction === 'backward') {
       setAxisPosition(prevPos => ({ ...prevPos, [axis]: minTravel[axis] }))
     }
+    console.log(axisIntervalRef.x, axisIntervalRef.y, axisIntervalRef.z);
+    if (!axisIntervalRef.x.current && !axisIntervalRef.y.current && !axisIntervalRef.z.current) {
+      stop()
+    }
+    
+  }
+ 
+  const homeMaschin = () => {
+    moveAxis('z', 'forward')
+    moveAxis('x', 'backward')
+    moveAxis('y', 'forward')
   }
 
   if (axisPosition.y > maxTravel.y) {
@@ -265,7 +265,8 @@ function App() {
           <h2>{axisPosition.z.toFixed(2)}</h2>
         </div>
         <button onClick={() => {setSpindelrunning(prevState => !prevState)}}>
-          {spindelRunning ? <p>Turn off Spindle</p> : <p>Turn on Spindle</p>}</button>
+          {spindelRunning ? 'Turn off Spindle' : 'Turn on Spindle'}</button>
+          <button onClick={homeMaschin}>Home Maschin</button>
       </div>
       <Canvas shadows camera={{ position: [2.5, 1, 2], fov: 50 }} >
         <ambientLight intensity={0.5} />
